@@ -19,8 +19,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-const GLuint SCR_WIDTH = 800;
-const GLuint SCR_HEIGHT = 600;
+const GLuint SCR_WIDTH = 1280;
+const GLuint SCR_HEIGHT = 720;
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 GLfloat lastX = SCR_WIDTH / 2.0f;

@@ -34,7 +34,13 @@ Camera::Camera(GLfloat posX, GLfloat posY, GLfloat posZ,
 
 glm::mat4 Camera::GetViewMatrix()
 {
-    return glm::lookAt(m_position, m_position + m_front, m_up);
+    const glm::mat4 view_orientaion = glm::transpose(glm::mat4(
+                glm::vec4(m_right, 0.0f),
+                glm::vec4(m_up, 0.0f),
+                glm::vec4(-m_front, 0.0f),
+                glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+    glm::mat4 view_position = glm::translate(glm::mat4(1.0f), -m_position);
+    return view_orientaion * view_position;
 }
 
 void Camera::ProcessKeyboard(CameraMovement direction, GLfloat deltaTime)
@@ -42,16 +48,16 @@ void Camera::ProcessKeyboard(CameraMovement direction, GLfloat deltaTime)
     const GLfloat velocity = m_movementSpeed * deltaTime;
     switch (direction) {
         case FORWARD:
-            m_position += m_front * velocity;
+            m_position += glm::vec3(m_front.x, 0.0, m_front.z) * velocity;
             break;
         case BACKWARD:
-            m_position -= m_front * velocity;
+            m_position -= glm::vec3(m_front.x, 0.0, m_front.z) * velocity;
             break;
         case LEFT:
-            m_position -= m_right * velocity;
+            m_position -= glm::vec3(m_right.x, 0.0, m_right.z) * velocity;
             break;
         case RIGHT:
-            m_position += m_right * velocity;
+            m_position += glm::vec3(m_right.x, 0.0, m_right.z) * velocity;
     }
 }
 
