@@ -25,4 +25,11 @@ const Material Ruby = {
     0.6f
 };
 
+const Material Chrome = {
+    glm::vec3(0.25f),
+    glm::vec3(0.4f),
+    glm::vec3(0.774597f),
+    0.6f
+};
+
 }  // namespace Material

@@ -187,10 +187,11 @@ int main()
 
     lightingShader.use();
 
-    lightingShader.setVec3("material.ambient", Material::Ruby.ambient);
-    lightingShader.setVec3("material.diffuse", Material::Ruby.diffuse);
-    lightingShader.setVec3("material.specular", Material::Ruby.specular);
-    lightingShader.setFloat("material.shineness", Material::Ruby.shineness); 
+    Material::Material material = Material::Ruby;
+    lightingShader.setVec3("material.ambient", material.ambient);
+    lightingShader.setVec3("material.diffuse", material.diffuse);
+    lightingShader.setVec3("material.specular", material.specular);
+    lightingShader.setFloat("material.shineness", material.shineness); 
 
     lightingShader.setVec3("light.ambient", glm::vec3(1.0f));
     lightingShader.setVec3("light.diffuse", glm::vec3(1.0f));
