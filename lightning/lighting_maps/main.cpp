@@ -10,7 +10,6 @@
 
 #include "shader.h"
 #include "camera.h"
-#include "material.h"
 #include "utils.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -162,9 +161,9 @@ int main()
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
     };
 
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    GLuint cubeVao;
+    glGenVertexArrays(1, &cubeVao);
+    glBindVertexArray(cubeVao);
 
     GLuint vbo;
     glGenBuffers(1, &vbo);
@@ -190,11 +189,9 @@ int main()
 
     lightingShader.use();
 
-    Material::Material material = Material::Ruby;
-    lightingShader.setVec3("material.ambient", material.ambient);
-    lightingShader.setVec3("material.diffuse", material.diffuse);
-    lightingShader.setVec3("material.specular", material.specular);
-    lightingShader.setFloat("material.shineness", material.shineness); 
+    lightingShader.setInt("material.diffuse", 0);
+    lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+    lightingShader.setFloat("material.shineness", 64.0f);
 
     lightingShader.setVec3("light.ambient", glm::vec3(1.0f));
     lightingShader.setVec3("light.diffuse", glm::vec3(1.0f));
@@ -244,17 +241,16 @@ int main()
         model = glm::mat4(1.0f);
         lightingShader.setMat4("model", model);
 
-        lightingShader.setInt("material.diffuse", 0);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, diffuseMap);
 
-        glBindVertexArray(vao);
+        glBindVertexArray(cubeVao);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glfwSwapBuffers(window);
     }
 
-    glDeleteVertexArrays(1, &vao);
+    glDeleteVertexArrays(1, &cubeVao);
     glDeleteVertexArrays(1, &lightVao);
     glDeleteBuffers(1, &vbo);
 
