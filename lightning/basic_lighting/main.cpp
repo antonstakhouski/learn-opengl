@@ -114,8 +114,9 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
-    Shader lightingShader("shaders/object.vs", "shaders/object.fs");
-    Shader lampShader("shaders/object.vs", "shaders/lamp.fs");
+    // Shader lightingShader("shaders/phong.vs", "shaders/phong.fs");
+    Shader lightingShader("shaders/gouraund.vs", "shaders/gouraund.fs");
+    Shader lampShader("shaders/lamp.vs", "shaders/lamp.fs");
 
     const GLfloat vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
