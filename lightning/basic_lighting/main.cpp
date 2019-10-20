@@ -223,8 +223,9 @@ int main()
         lightingShader.use();
         lightingShader.setMat4("projection", projection);
         lightingShader.setMat4("view", view);
-        lightingShader.setVec3("viewPos", camera.m_position);
-        lightingShader.setVec3("lightPos", lightPos);
+        // we are making light calculations in a view space
+        lightingShader.setVec3("lightPos",
+                               glm::vec3(view * glm::vec4(lightPos, 1.0f)));
 
         model = glm::mat4(1.0f);
         lightingShader.setMat4("model", model);
