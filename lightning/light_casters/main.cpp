@@ -207,9 +207,13 @@ int main()
     lightingShader.setInt("material.specular", 1);
     lightingShader.setFloat("material.shineness", 64.0f);
 
-    lightingShader.setVec3("light.ambient", glm::vec3(0.2f));
+    lightingShader.setVec3("light.ambient", glm::vec3(1.0f));
     lightingShader.setVec3("light.diffuse", glm::vec3(1.0f));
     lightingShader.setVec3("light.specular", glm::vec3(1.0f));
+
+    lightingShader.setFloat("light.constant", 1.0f);
+    lightingShader.setFloat("light.linear", 0.35f);
+    lightingShader.setFloat("light.quadratic", 0.44f);
 
     while (!glfwWindowShouldClose(window)) {
 
@@ -226,14 +230,30 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 model(1.0f);
 
+        // draw lamp
+        lampShader.use();
+        lampShader.setMat4("projection", projection);
+        lampShader.setMat4("view", view);
+
+        model = glm::mat4(1.0f);
+        const GLfloat currTime = glfwGetTime();
+        lightPos.x = sin(currTime);
+        lightPos.y = cos(currTime);
+        lightPos.z = cos(currTime);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f));
+        lampShader.setMat4("model", model);
+
+        glBindVertexArray(lightVao);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
         // draw object
         lightingShader.use();
         lightingShader.setMat4("projection", projection);
         lightingShader.setMat4("view", view);
         // we are making light calculations in a view space
-        const glm::vec3 lightPos(-0.2f, -1.0f, -0.3f); 
         const glm::vec3 viewLightPos = glm::vec3(view * glm::vec4(lightPos, 1.0f));
-        lightingShader.setVec3("light.direction", lightPos);
+        lightingShader.setVec3("light.position", viewLightPos);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, diffuseMap);
