@@ -179,6 +179,7 @@ int main()
 
     GLuint diffuseMap = loadTexture("textures/container2.png");
     GLuint specularMap = loadTexture("textures/container2_specular.png");
+    GLuint emissionMap = loadTexture("textures/matrix.jpg");
 
     GLuint lightVao;
     glGenVertexArrays(1, &lightVao);
@@ -192,10 +193,11 @@ int main()
 
     lightingShader.setInt("material.diffuse", 0);
     lightingShader.setInt("material.specular", 1);
+    lightingShader.setInt("material.emission", 2);
     lightingShader.setFloat("material.shineness", 64.0f);
 
-    lightingShader.setVec3("light.ambient", glm::vec3(1.0f));
-    lightingShader.setVec3("light.diffuse", glm::vec3(1.0f));
+    lightingShader.setVec3("light.ambient", glm::vec3(0.2f));
+    lightingShader.setVec3("light.diffuse", glm::vec3(0.5f));
     lightingShader.setVec3("light.specular", glm::vec3(1.0f));
 
     while (!glfwWindowShouldClose(window)) {
@@ -236,16 +238,18 @@ int main()
         lightingShader.setMat4("view", view);
         // we are making light calculations in a view space
         const glm::vec3 viewLightPos = glm::vec3(view * glm::vec4(lightPos, 1.0f));
-        lightingShader.setVec3("light.position", viewLightPos.x, viewLightPos.y,
-                               viewLightPos.z);
+        lightingShader.setVec3("light.position", viewLightPos);
 
         model = glm::mat4(1.0f);
         lightingShader.setMat4("model", model);
+        lightingShader.setFloat("time", glfwGetTime());
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, diffuseMap);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, specularMap);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, emissionMap);
 
         glBindVertexArray(cubeVao);
         glDrawArrays(GL_TRIANGLES, 0, 36);
